@@ -2,15 +2,21 @@ package com.example.readsms;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
 import android.Manifest;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,14 +24,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ListView list ;
+    ListView list;
     ArrayList list1;
+    public EditText et ;
+    public Button btn_Save;
     public String FILE_NAME = "nyy2.txt";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         list = findViewById(R.id.list);
+        et =findViewById(R.id.textView);
+        btn_Save = findViewById(R.id.save);
+        et.setText("");
+
         /* if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED)
                 {  ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_SMS},0);
                     Toast.makeText(MainActivity.this, "Please Allow the 'Read-SMS' Permission to continue", Toast.LENGTH_LONG).show();
@@ -57,31 +69,45 @@ public class MainActivity extends AppCompatActivity {
         };
         ActivityCompat.requestPermissions(this, permissions, 1);
         read_sms();
-        write_external();
+        btn_Save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                String chk = et.getText().toString();
+
+                if (chk.matches(""))
+                {
+                    Toast.makeText(MainActivity.this, "Please Enter the file name to continue.. ", Toast.LENGTH_LONG).show();
+
+                }
+                else
+                    write_external();
+
+            }
+        });
     }
 
     private void write_internal() {
 
         //////////////////////////////// /// Writing to intenral memory Only cannot be accessed from other apps or Rooted
-            FileOutputStream fos = null;
-            try {
+        FileOutputStream fos = null;
+        try {
 
-                fos = openFileOutput(FILE_NAME,MODE_APPEND);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            try {
-                fos.write(list1.toString().getBytes());
-                fos.close();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
-                    Toast.LENGTH_LONG).show();
+            fos = openFileOutput(FILE_NAME, MODE_APPEND);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            fos.write(list1.toString().getBytes());
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, "Saved to " + getFilesDir() + "/" + FILE_NAME,
+                Toast.LENGTH_LONG).show();
 
     }
+
     private void read_sms() {
 
         Uri uri = Uri.parse("content://sms");
@@ -99,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter adapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, list1);
         list.setAdapter(adapter);
     }
+
     public void displaySmsLog() {
         Uri allMessages = Uri.parse("content://sms/sent");
         //Cursor cursor = managedQuery(allMessages, null, null, null, null); Both are same
@@ -106,30 +133,32 @@ public class MainActivity extends AppCompatActivity {
                 null, null, null);
 
         while (cursor.moveToNext()) {
-            for (int i = 0; i < cursor.getColumnCount(); i++) {
-                Log.d("nyy"  , cursor.getString(i) + "--------" +cursor.getColumnName(i));
+            for ( int i = 0; i < cursor.getColumnCount(); i++ ) {
+                Log.d("nyy", cursor.getString(i) + "--------" + cursor.getColumnName(i));
             }
             //Log.d("nyy","******************");
         }
 
     }
+
     public void write_external() {
 
-            File root = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DCIM);
-            File dir = new File(root.getPath() );
-            File  file = new File(dir,"tattu.txt");
-            try {
-                //FileOutputStream fos=new FileOutputStream(Environment.getExternalStorageDirectory()+"/abc.txt");
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                fileOutputStream.write(list1.toString().getBytes());
-                fileOutputStream.close();
-                Toast.makeText(MainActivity.this, "File Saved on External SD card ", Toast.LENGTH_LONG).show();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                File root = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_DCIM);
+                File dir = new File(root.getPath());
+                File file = new File(dir, et.getText().toString()+".txt");
+
+                try {
+                    //FileOutputStream fos=new FileOutputStream(Environment.getExternalStorageDirectory()+"/abc.txt");
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    fileOutputStream.write(list1.toString().getBytes());
+                    fileOutputStream.close();
+                    Toast.makeText(MainActivity.this, "File Saved on External SD card ", Toast.LENGTH_LONG).show();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
         //OLD CODE
        /* //  File path = Environment.getExternalStoragePublicDirectory(
