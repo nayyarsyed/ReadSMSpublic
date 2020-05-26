@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList list1;
     public EditText et ;
     public Button btn_Save;
+    Button eml;
     public String FILE_NAME = "nyy2.txt";
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         list = findViewById(R.id.list);
         et =findViewById(R.id.textView);
         btn_Save = findViewById(R.id.save);
+        eml = findViewById(R.id.email);
         et.setText("");
 
         /* if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED)
@@ -69,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         };
         ActivityCompat.requestPermissions(this, permissions, 1);
         read_sms();
+        // share_email();
+
         btn_Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +87,33 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                     write_external();
+
+            }
+        });
+    }
+
+    private void share_email() {
+
+        eml.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "email", Toast.LENGTH_LONG).show();
+
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setType("text/plain");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"email@example.com"});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "subject here");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "body text");
+                /*File root = Environment.getExternalStorageDirectory();
+                String pathToMyAttachedFile = "temp/attachement.xml";
+                File file = new File(root, pathToMyAttachedFile);
+                if (!file.exists() || !file.canRead()) {
+                    return;
+                }
+                Uri uri = Uri.fromFile(file);
+                emailIntent.putExtra(Intent.EXTRA_STREAM, uri);*/
+                startActivity(Intent.createChooser(emailIntent, "Pick an Email provider"));
+
 
             }
         });
@@ -118,8 +150,12 @@ public class MainActivity extends AppCompatActivity {
             String sent = c.getString(0);
             String no = c.getString(2);
             String message = c.getString(12); //12 for Moto G and 13 for emul
-            list1.add("Message No: " + (c.getPosition() + 1) + "\n" + "Sent at:" + sent);
-            list1.add("From       :" + no + "\n" + "Body: " + message);
+            list1.add("Message No    : " + (c.getPosition() + 1) + ";\n"
+                    + "Sent at     :" + sent + ";\n"
+                    + "From       :" + no + ";\n"
+                    + "Body       : " + message + ";\n");
+
+
             //sb.append(no + message + sent).append("\n");
         }
         ArrayAdapter adapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, list1);
