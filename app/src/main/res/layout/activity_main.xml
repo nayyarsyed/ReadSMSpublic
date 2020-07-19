@@ -1,52 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.readsms.MainActivity">
+    android:layout_gravity="center"
+    android:backgroundTint="@color/ic_launcher_background"
+    android:foregroundGravity="center"
+    android:orientation="vertical"
+    app:layout_anchorGravity="center"
+    tools:context="com.example.readsms.MainActivity"
+    tools:layout_editor_absoluteX="-196dp"
+    tools:layout_editor_absoluteY="45dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="sans-serif-medium"
+        android:foregroundGravity="center"
+        android:gravity="center"
+        android:text="SMS save to text file"
+        android:textColor="#3F51B5"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/file_loc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:capitalize="words"
+        android:clickable="false"
+        android:textColor="#3F51B5"
+        android:typeface="monospace" />
 
     <EditText
         android:id="@+id/textView"
-        android:layout_width="379dp"
-        android:layout_height="wrap_content"
-        android:hint="Please enter file name here"
-        android:text="sfsfsdf"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/save"
-        android:layout_width="268dp"
-        android:layout_height="47dp"
-        android:text="Save SMS list"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="email"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/save" />
+        android:layout_gravity="center"
+        android:hint="Please enter file name here"
+        android:textColor="#FF5722" />
 
     <ListView
         android:id="@+id/list"
-        android:layout_width="379dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="2dp"
+        android:paddingStart="2dp"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="2dp"
+        android:paddingRight="2dp"
+        android:paddingBottom="2dp">
 
     </ListView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="2dp"
+        android:paddingStart="2dp"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="2dp"
+        android:paddingRight="2dp"
+        android:paddingBottom="2dp">
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:text="Save SMS list" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/Load"
+            android:layout_width="142dp"
+            android:layout_height="wrap_content"
+            android:text="Load Sms from Inbox" />
+
+    </LinearLayout>
+
+</LinearLayout>
